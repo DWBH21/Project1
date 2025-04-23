@@ -1,4 +1,6 @@
 package MyInfArith;
+import arbitraryarithmetic.AFloat;
+import arbitraryarithmetic.AInteger;
 public class MyInfArith  {
     public static void main(String[] args) {
         if(args.length != 4)
