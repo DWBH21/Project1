@@ -17,7 +17,7 @@ def main():
     args = sys.argv
     if len(args)!=5:
         print("Usage: /usr/bin/python3 test.py <int/float> <add/sub/mul/div> <operand1> <operand2>")
-        sys.exit(1) 
+        sys.exit(1)
     tester = MyInfArithPy()
     tester.compile()
     tester.execute(args[1], args[2], args[3], args[4])

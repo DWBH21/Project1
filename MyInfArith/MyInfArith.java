@@ -17,8 +17,17 @@ public class MyInfArith  {
         try
         {
             if (type.equalsIgnoreCase("int")) {
-                AInteger num1 = AInteger.parse(operand1);
-                AInteger num2 = AInteger.parse(operand2);
+                AInteger num1,num2;
+                try 
+                {
+                    num1 = AInteger.parse(operand1);
+                    num2 = AInteger.parse(operand2);
+                }
+                catch(NumberFormatException e) 
+                {
+                    System.out.println("Error: Invalid Operand. Please enter a correct number");
+                    return;
+                }
                 AInteger result;
 
                 switch (oper.toLowerCase()) {
@@ -53,8 +62,17 @@ public class MyInfArith  {
                 System.out.println(result.toString());
             }
             else if (type.equalsIgnoreCase("float")) {
-                AFloat num1 = AFloat.parse(operand1);
-                AFloat num2 = AFloat.parse(operand2);
+                AFloat num1, num2;
+                try 
+                {
+                    num1 = AFloat.parse(operand1);
+                    num2 = AFloat.parse(operand2);
+                }
+                catch(NumberFormatException e)
+                {
+                    System.out.println("Error: Invalid Operand. Please enter a correct number");
+                    return;
+                }
                 AFloat result;
 
                 switch (oper.toLowerCase()) {
