@@ -62,7 +62,7 @@ class MyInfArithPy:
         
         tester = MyInfArithPy()
         tester.compile()
-            
+        passed = 0  
         for i in range(no_cases):              
             data_type = random.choice(data_types)         # Choose the data type randomly
             operator = random.choice(operators)           # Choose the arithmetic operator randomly
@@ -103,14 +103,17 @@ class MyInfArithPy:
             elif(operator=='mul'):
                 python_result = (d1 * d2)
             elif(operator=='div'):
-                if(data_type=='float'):
-                    python_result = (d1 / d2)
+                if(d2==0):
+                    python_result = "Error: Division by zero"
                 else:
-                    result_sign = (sign1=='-') ^ (sign2=='-')
-                    python_result = (abs(d1) // abs(d2))
-                    if(result_sign):
-                        python_result *= -1
-                                    
+                    if(data_type=='float'):  
+                        python_result = (d1 / d2)
+                    else:
+                        result_sign = (sign1=='-') ^ (sign2=='-')
+                        python_result = (abs(d1) // abs(d2))
+                        if(result_sign):
+                            python_result *= -1
+
             if(data_type=='int'):
                 python_result = str(int(python_result))         # to ignore digits after decimal
             elif(data_type=='float'):
@@ -118,13 +121,14 @@ class MyInfArithPy:
             
             if(python_result == java_result):
                 match = "Correct ✅"
+                passed+=1
             else:
                 match = "Incorrect ❌"
 
             print(f'Java: {java_result}  Python: {python_result}  {match}')
             print()
+        print(f'{passed} out of {no_cases} test cases passed')
                 
-
 def trim(float_result, precision=30):           # to format the java result to 30 digits of precision
         # print("Result without trimming: " , float_result)
         length = len(float_result)
@@ -138,7 +142,6 @@ def main():
         print("No arguments found. Generating custom test cases")
         no_cases = int(input("Enter number of test cases to generate: "))
         tester = MyInfArithPy()
-        tester.compile()
         tester.generateRandom(no_cases)
         
     elif len(args)==5:
