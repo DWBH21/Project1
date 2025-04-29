@@ -295,8 +295,8 @@ public class AFloat {
         if(num1.getSign()==0 || num2.getSign()==0)
             return new AFloat();
 
-        int exp1 = this.exp - num1.noOfDigits();
-        int exp2 = float2.getExp() - num2.noOfDigits();
+        int exp1 = this.exp - num1.noOfDigits() + 1;
+        int exp2 = float2.getExp() - num2.noOfDigits() + 1;
     
         AInteger intResult = num1.multiply(num2);   // multiply the AIntegers representing the digits of the two AFloats
         int resultExp = exp1 + exp2;                // Calculate the exponent of the result
@@ -307,7 +307,7 @@ public class AFloat {
             resultExp++;                            // Increments the exponent of the result by one for every trailing zero removed 
         }
         // Invoke the AFloat constructor with the formatted AInteger and the final exponent when AFloat is represented in scientific notation
-        return new AFloat(intResult, resultExp + intResult.noOfDigits());   
+        return new AFloat(intResult, resultExp + intResult.noOfDigits() - 1);   
     }
     
     // Divides the current AFloat object by the AFloat passed as argument
