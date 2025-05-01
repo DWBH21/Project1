@@ -1,0 +1,370 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{fvextra}
+\usepackage{geometry} % For setting margins
+\usepackage{listings} % For code formatting
+\usepackage{color}    % For coloring in listings
+\usepackage{fancyhdr}
+\geometry{left=2cm,right=2cm,top=2cm,bottom=2cm}
+
+% Header and Footer
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Anant Maheshwary}
+\lhead{CS1023 - Arbitrary Precision Arithmetic}
+\cfoot{\thepage}
+
+\begin{document}
+
+% Manually formatted title block
+\begin{center}
+    {\LARGE \textbf{Arbitrary Precision Arithmetic}}\\[1.5cm]
+    {\large Final Project Report}\\
+    {\large CS1023 - Software Development Fundamentals}\\[1.5cm]
+    {\Large \textbf{Anant Maheshwary}}\\
+    CS24BTECH11006\\[1.5cm]
+    April 2025
+\end{center}
+
+\renewcommand{\contentsname}{Contents}
+\tableofcontents
+\newpage
+
+\section{Abstract}
+Java's primitive data types, such as \texttt{int}, \texttt{long}, \texttt{float}, and \texttt{double}, have limitations in the range and precision of numbers they can represent. For example, a Java \texttt{int} can represent values only in the range from \texttt{-2,147,483,648} to \texttt{2,147,483,647}, and a \texttt{float} has a precision of approximately 7 decimal digits with a range of about \texttt{1.4E-45} to \texttt{3.4E+38}. These constraints make them unsuitable for computations involving very large integers or highly precise decimal values.
+
+This project addresses these limitations by developing a Java library, \texttt{arbitraryarithmetic}, that provides classes for arbitrary-precision integer and floating-point arithmetic. The library includes \texttt{AInteger} and \texttt{AFloat} classes, implemented using object-oriented principles, to store numerical values of any desired length and precision. These classes support constructors for initialization and methods for addition, subtraction, multiplication, and division, for accurate computations without overflow, underflow or loss of precision.
+
+\section{Java Classes}
+
+\subsection{AInteger}
+
+\subsubsection{Data Representation}
+
+It has the following member variables for its representation:
+
+\begin{enumerate}
+    \item \texttt{int sign} - To store the sign of the \texttt{AInteger}. It takes the values \texttt{1} for positive, \texttt{-1} for negative and \texttt{0} for a zero \texttt{AInteger}.
+    \item \texttt{int[] num} - An \texttt{AInteger} array whose elements are integers in the range \texttt{0} to \texttt{10\^{}9 - 1}. The \texttt{AInteger} to be stored is broken into blocks of 9 digits where the most significant block can have less than 9 digits. The individual integers so obtained are stored in an array in the decreasing order of their significance in the original number. i.e its last 9 digits will form the first element of the array.
+
+    E.g the number \texttt{1023003456789123456789} is stored as \texttt{\{123456789, 3456789, 1023\}}
+\end{enumerate}
+
+\textit{My Reasoning behind this:} \texttt{int} value in Java takes the maximum value = \texttt{2\^{}31 - 1 = 2,14,74,83,647}. So every 9 digit decimal integer can be stored in the \texttt{int} variable. Also, sum of two such 9-digit integers still lies within the range of \texttt{int}, reducing risk of overflow problems later on.
+
+The \texttt{AInteger} representing zero is represented by \texttt{sign = 0} and \texttt{num} array = \texttt{\{0\}}
+
+\subsubsection{Constructors}
+
+\begin{center}
+\begin{tabular}{|l|p{8cm}|}
+\hline
+\textbf{Public Constructors} & \textbf{Description} \\
+\hline
+\texttt{AInteger()} & Default constructor. Initializes the \texttt{AInteger} to zero. \\
+\hline
+\texttt{AInteger(String s)} & Initializes the \texttt{AInteger} from its string representation \texttt{s}. \\
+\hline
+\texttt{AInteger(AInteger obj)} & Copy constructor. Initializes a new \texttt{AInteger} object with the same sign and magnitude as \texttt{obj}. \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsubsection{Methods}
+
+\begin{center}
+\begin{tabular}{|l|p{8cm}|}
+\hline
+\textbf{Public Methods} & \textbf{Description} \\
+\hline
+\texttt{parse(String s)} & A static method that parses the string \texttt{s} and returns an \texttt{AInteger} object. Throws \texttt{NumberFormatException} if string is invalid.\\
+\hline
+\texttt{getSign()} & Returns the sign of the \texttt{AInteger} (\texttt{-1} for negative, \texttt{0} for zero, \texttt{1} for positive). \\
+\hline
+\texttt{getNum()} & Returns the array representing the magnitude of the \texttt{AInteger}. \\
+\hline
+\texttt{toString()} & Returns the string representation of the \texttt{AInteger} object. \\
+\hline
+\texttt{equals(Object obj)} & Returns \texttt{true} if the current \texttt{AInteger} is equal to the object \texttt{obj}, \texttt{false} otherwise. \\
+\hline
+\texttt{compare(AInteger integer2)} & Compares the current \texttt{AInteger} with \texttt{integer2}. Returns \texttt{1} if greater, \texttt{0} if equal, \texttt{-1} if less than. \\
+\hline
+\texttt{compareMagnitude(AInteger integer2)} & Compares the magnitudes of the current \texttt{AInteger} and \texttt{integer2}. \\
+\hline
+\texttt{negate()} & Returns an \texttt{AInteger} with the opposite sign. \\
+\hline
+\texttt{abs()} & Returns the absolute value of the current \texttt{AInteger}. \\
+\hline
+\texttt{add(AInteger integer2)} & Adds the current \texttt{AInteger} to \texttt{integer2} and returns the result. \\
+\hline
+\texttt{subtract(AInteger integer2)} & Subtracts \texttt{integer2} from the current \texttt{AInteger} and returns the result. \\
+\hline
+\texttt{multiply(AInteger integer2)} & Multiplies the current \texttt{AInteger} with \texttt{integer2} and returns the result. \\
+\hline
+\texttt{divide(AInteger divisor)} & Divides the current \texttt{AInteger} by \texttt{divisor} and returns the result. Throws \texttt{ArithmeticException} if dividing by zero. \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{AFloat}
+
+\subsubsection{Data Representation}
+
+It has the following member variables for its representation:
+
+\begin{enumerate}
+    \item \texttt{AInteger num} - This \texttt{AInteger} stores all the digits of the floating-point number, effectively treating it as an integer with the decimal point removed. The sign of the \texttt{AFloat} is also stored within this \texttt{AInteger}.
+    \item \texttt{int exp} - It stores the exponent when the above float is written in scientific notation. It can be positive, negative or zero.
+
+    E.g. \texttt{1234.56789} is stored as \texttt{AInteger(123456789)} and \texttt{exp=3} as the given number in scientific notation is \texttt{1.23456789 * 10\^{}3}.
+
+    Similarly \texttt{0.00012345} is stored as \texttt{AInteger(12345)} and \texttt{exp=-4} as the given number in scientific notation is \texttt{1.2345 * 10\^{}-4}.
+\end{enumerate}
+
+The \texttt{AFloat 0.0} is stored as \texttt{AInteger(0)} and \texttt{exp=0}
+
+Also, \texttt{1234.56789} will never be stored as \texttt{AInteger(1234567890)} and \texttt{exp=3}\\\\
+
+\textit{My Reasoning behind this:} To ensure a unique representation for every \texttt{AFloat} and to simplify arithmetic operations, the \texttt{AInteger num} will never have trailing zeros. Representing the number in scientific notation removes any ambiguity about the location of the decimal point and storing the exponent separately simplifies multiplication and division, as the exponents can be handled independently.
+
+This design of the \texttt{AFloat} class demonstrates code reusability by employing the \texttt{AInteger} class (as composition) and using its arithmetic methods.\\
+
+\textbf{Precision} - The \texttt{AFloat} class also contains a \texttt{static final} variable \texttt{PRECISION} which is currently set to 100 and defines the number of digits of precision to which the result of a division is calculated. It can be changed according to requirement.\\
+Other operations like addition, multiplication and subtraction give the most accurate result (without truncating) and are not affected by the \texttt{PRECISION} variable\\\\
+
+The member variables in both classes are declared \texttt{final} and \texttt{private} to make the classes \textbf{immutable} and all operations create new objects instead of modifying earlier ones.
+
+\subsubsection{Constructors}
+
+\begin{center}
+\begin{tabular}{|l|p{8cm}|}
+\hline
+\textbf{Public Constructors} & \textbf{Description} \\
+\hline
+\texttt{AFloat()} & Default constructor. Initializes the \texttt{AFloat} to zero (0.0). \\
+\hline
+\texttt{AFloat(AFloat float2)} & Copy constructor. Initializes the \texttt{AFloat} as a copy of \texttt{float2}. \\
+\hline
+\texttt{AFloat(String s)} & Initializes the \texttt{AFloat} from its string representation \texttt{s}. \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsubsection{Methods}
+
+\begin{center}
+\begin{tabular}{|l|p{8cm}|}
+\hline
+\textbf{Public Methods} & \textbf{Description} \\
+\hline
+\texttt{parse(String s)} & A static method that parses the string \texttt{s} and returns an \texttt{AFloat} object. Throws \texttt{NumberFormatException} if string is invalid.\\
+\hline
+\texttt{getNum()} & Returns the \texttt{AInteger} representing the numerical value of the \texttt{AFloat}. \\
+\hline
+\texttt{getExp()} & Returns the exponent of the \texttt{AFloat}. \\
+\hline
+\texttt{toString()} & Returns the string representation of the \texttt{AFloat}. \\
+\hline
+\texttt{add(AFloat float2)} & Adds the current \texttt{AFloat} to \texttt{float2} and returns the result. \\
+\hline
+\texttt{subtract(AFloat float2)} & Subtracts \texttt{float2} from the current \texttt{AFloat} and returns the result. \\
+\hline
+\texttt{multiply(AFloat float2)} & Multiplies the current \texttt{AFloat} by \texttt{float2} and returns the result. \\
+\hline
+\texttt{divide(AFloat float2)} & Divides the current \texttt{AFloat} by \texttt{float2} and returns the result. Throws \texttt{ArithmeticException} if dividing by zero. \\
+\hline
+\end{tabular}
+\end{center}
+
+\newpage
+\section{File Structure and Implementation Techniques}
+
+\subsection{Project Structure}
+
+The project follows a standard Maven directory structure:
+
+\begin{verbatim}
+Project1/
+|--- MyInfArith/
+|   --- MyInfArith.java
+|--- src/
+|   --- main/
+|       --- java/
+|           --- arbitraryarithmetic/
+|               --- AFloat.java
+|               --- AInteger.java
+|--- target/
+|   --- classes/
+|       --- arbitraryarithmetic/
+|           --- AFloat.class
+|           --- AInteger.class
+|   --- ... (other Maven build files)
+|--- aarithmetic.jar
+|--- pom.xml
+|--- test.py
+|--- Dockerfile
+|--- README.md
+|--- report.pdf
+\end{verbatim}
+
+\begin{itemize}
+    \item \texttt{src/main/java/arbitraryarithmetic/}: This directory contains the source code for the arbitrary-precision arithmetic library: AInteger.java and AFloat.java
+    \item \texttt{target/classes/arbitraryarithmetic/}: This directory contains the compiled \texttt{.class} files for the library.
+    \item \texttt{aarithmetic.jar}: This is the Java Archive (JAR) file created by Maven. It packages the compiled \texttt{AInteger.class} and \texttt{AFloat.class} files. It does not contain a class with a main method and is meant to be used as a library and not an executable jar.
+    \item \texttt{pom.xml}: This is the Maven Project Object Model file. It configures the project's build process, including dependencies, plugins, and output settings. Maven uses this file to compile the Java source files and package them into the \texttt{aarithmetic.jar} file.
+    \item \texttt{MyInfArith.java}: This file is in the project's root directory (in a \texttt{MyInfArith} package). It contains a \texttt{main} method, and demonstrates the use of \texttt{AInteger} and \texttt{AFloat} classes from the \texttt{aarithmetic.jar} library.
+\end{itemize}
+
+\subsection{Implementation Techniques}
+
+\begin{itemize}
+    \item \textbf{Library as a JAR:} \texttt{aarithmetic.jar} holds the arbitrary-precision arithmetic code, making it a reusable library. Other java programs can use it by including the JAR in their classpath.
+    \item \textbf{Command-Line Interface (CLI) via \texttt{MyInfArith.java}:} The \texttt{MyInfArith} class provides a command-line interface to interact with the library. It takes four arguments:
+    \begin{enumerate}
+        \item The data type (\texttt{int} or \texttt{float}).
+        \item The arithmetic operation (\texttt{add}, \texttt{sub}, \texttt{mul}, or \texttt{div}).
+        \item The first operand.
+        \item The second operand.
+    \end{enumerate}
+   
+    The \texttt{main} method in \texttt{MyInfArith.java} conditionally determines at run-time whether to perform integer or floating-point arithmetic based on the first command-line argument. This is called \textbf{dynamic dispatch}.
+
+    It also uses the classes' \texttt{parse(String s)} methods provided by the \texttt{AInteger} and \texttt{AFloat} classes to create \texttt{AInteger} and \texttt{AFloat} objects from their string representations and handles potential \texttt{NumberFormatException} if the input is invalid or \texttt{ArithmeticException} in case of Division by Zero.
+\end{itemize}
+
+\subsection{Example Usage}
+
+\textbf{1. Building the project using Maven}
+
+\begin{lstlisting}[language=bash, basicstyle=\ttfamily\footnotesize, frame=single]
+$ mvn clean install
+\end{lstlisting}
+
+\begin{itemize}
+    \item \texttt{mvn clean}: This command removes any previously built artifacts from the \texttt{target} directory.
+    \item \texttt{mvn install}: This command compiles the Java source files and packages the compiled classes into the \texttt{aarithmetic.jar} file.
+\end{itemize}
+
+\textbf{2. Providing \texttt{aarithmetic.jar} as class path and compiling \texttt{MyInfArith}}
+
+\begin{lstlisting}[language=bash, basicstyle=\ttfamily\footnotesize, frame=single, breaklines=true]
+$ javac -cp .:home/anant/Programs/SDF/Project1/target/aarithmetic.jar MyInfArith/MyInfArith.java
+\end{lstlisting}
+
+\textbf{3. Providing \texttt{aarithmetic.jar} as class path and executing the compiled \texttt{MyInfArith.class} file}
+
+\begin{lstlisting}[language=bash, basicstyle=\ttfamily\footnotesize, frame=single, breaklines=true]
+$ java -cp .:home/anant/Programs/SDF/Project1/target/aarithmetic.jar:target/classes MyInfArith.MyInfArith int add 4 5
+Output: 9
+\end{lstlisting}
+
+\section{Testing}
+
+The project includes \texttt{test.py} for automated testing. It supports:
+
+\begin{enumerate}
+    \item \textbf{Specific Testing:}  Executes a single operation:
+    \begin{lstlisting}[language=bash, basicstyle=\ttfamily\footnotesize, frame=single, breaklines=true]
+/usr/bin/python3 test.py <int/float> <add/sub/mul/div> <operand1> 
+<operand2>
+    \end{lstlisting}
+    \item \textbf{Randomized Testing:}  Generates and executes random test cases:
+    \begin{lstlisting}[language=bash, basicstyle=\ttfamily\footnotesize, frame=single, breaklines=true]
+/usr/bin/python3 test.py
+    \end{lstlisting}
+\end{enumerate}
+
+For each test:
+
+\begin{enumerate}
+    \item It compiles Java code:
+    \begin{lstlisting}[language=bash, basicstyle=\ttfamily\footnotesize, frame=single, breaklines=true]
+javac -cp .:home/anant/Programs/SDF/Project1/target/aarithmetic.jar     
+ MyInfArith/MyInfArith.java
+    \end{lstlisting}
+    \item It executes the Java code and captures output:
+    \begin{lstlisting}[language=bash, basicstyle=\ttfamily\footnotesize, frame=single, breaklines=true]
+java -cp
+.:home/anant/Programs/SDF/Project1/target/aarithmetic.jar:target/classes
+ MyInfArith.MyInfArith <data_type> <operator> <operand1> <operand2>
+    \end{lstlisting}
+    \item Calculates the result of the operation using Python (uses Decimal module for float) 
+    \item Compares the both results (considers 30 digits after the decimal in case of float results) and then prints correct/incorrect. 
+\end{enumerate}
+
+All test cases are randomized over the following:
+\begin{itemize}
+    \item Data types: \texttt{int}, \texttt{float}
+    \item Operators: \texttt{add}, \texttt{sub}, \texttt{mul}, \texttt{div}
+    \item Operands: Large random numbers, with random signs and decimal points (for floats).
+\end{itemize}
+
+This testing ensures the library's correctness.
+
+\section{Containerization with Docker}
+
+\subsection{Build the Docker Image}
+\begin{lstlisting}[language=bash, basicstyle=\ttfamily\footnotesize, frame=single, breaklines=true]
+docker build -t <image_name> .
+\end{lstlisting}
+
+The project uses a multi-stage Docker build:
+\begin{itemize}
+  \item \textbf{Stage 1}: Uses a Maven image to build the JAR. \\
+  Base Image: \texttt{maven:3.9.6-eclipse-temurin-21}
+  \item \textbf{Stage 2}: Uses a JDK 21 image with Python for running tests.\\
+  Base Image: \texttt{eclipse-temurin:21-jdk-jammy}
+\end{itemize}
+
+\subsection{Run Java CLI in a Container}
+\begin{lstlisting}[language=bash, basicstyle=\ttfamily\footnotesize, frame=single, breaklines=true]
+docker run <image_name> int add 123 456
+Output: 579
+\end{lstlisting}
+
+\subsection{Run Python Test Script in a Container}
+
+\subsubsection{Randomized Testing}
+\begin{lstlisting}[language=bash, basicstyle=\ttfamily\footnotesize, frame=single, breaklines=true]
+docker run -it --entrypoint python3 <image_name> /app/test.py
+\end{lstlisting}
+
+\subsubsection{Specific Test}
+\begin{lstlisting}[language=bash, basicstyle=\ttfamily\footnotesize, frame=single, breaklines=true]
+docker run --entrypoint python3 <image_name> /app/test.py float div 10.5 2.5
+\end{lstlisting}
+
+\subsection{CLI Help}
+If no arguments are passed, the container displays usage instructions:
+\begin{lstlisting}[language=bash, basicstyle=\ttfamily\footnotesize, frame=single, breaklines=true]
+docker run <image_name>
+\end{lstlisting}
+\subsection{Other Helpful Docker Commands}
+
+
+\hspace{0.5cm}
+Display all images and their information
+\begin{lstlisting}[language=bash, basicstyle=\ttfamily\footnotesize, frame=single, breaklines=true]
+docker images
+\end{lstlisting}
+
+Display all containers (active and closed)
+\begin{lstlisting}[language=bash, basicstyle=\ttfamily\footnotesize, frame=single, breaklines=true]
+docker ps -a
+\end{lstlisting}
+
+Remove all closed containers
+\begin{lstlisting}[language=bash, basicstyle=\ttfamily\footnotesize, frame=single, breaklines=true]
+docker container prune
+\end{lstlisting}
+
+Remove an image with its image\_name
+\begin{lstlisting}[language=bash, basicstyle=\ttfamily\footnotesize, frame=single, breaklines=true]
+docker rmi <image_name>
+\end{lstlisting}
+\end{document}
