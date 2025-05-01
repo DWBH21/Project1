@@ -124,9 +124,9 @@ java -cp .:home/anant/Programs/SDF/Project1/target/aarithmetic.jar:target/classe
 ## Containerization with Docker
 
 ### Build the Docker Image
-    ```bash
-    docker build -t <image_name> .
-    ```
+  ```bash
+  docker build -t <image_name> .
+  ```
 The project uses a multi-stage Docker build. 
 - Stage 1 uses a Maven image to build the JAR.
 - Stage 2 uses a JDK 21 image with Python for running tests.
