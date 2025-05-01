@@ -8,19 +8,19 @@ This project implements an arbitrary precision arithmetic system in Java to over
 ## Features
 
 ### Java Classes
-- AInteger - For large integer arithmetic
-- AFloat - For arbitrary precision float arithmetic
+- `AInteger` - For large integer arithmetic
+- `AFloat` - For arbitrary precision float arithmetic
 - Implementation of arithmetic operations:
   - Addition
   - Subtraction
   - Multiplication
   - Division
-- MyInfArith - Class used for demonstrating use of aarithmetic.jar as library. It allows execution of the AInteger and AFloat classes through the command line
+- `MyInfArith` - Class used for demonstrating use of aarithmetic.jar as library. It allows execution of the AInteger and AFloat classes through the command line
 
 ## Dependencies 
 
 - **Language:** Java 21
-- **Build Tool:** Maven
+- **Build Tool:** Apache Maven 3.8.7
 - **Library Format:** Packaged as a reusable JAR
 - **Testing:** Python-3 automated test script
 
@@ -77,17 +77,38 @@ The project includes a `test.py` script for automated testing. It supports:
 ```bash
 /usr/bin/python3 test.py
 Output: 
-Enter number of test cases to generate: 
+No arguments found. Generating custom test cases
+Enter number of test cases to generate: 5
+1. -521201065.054138 * 620630855288177.7375262484013817
+Java: -323473462781658831951562.4986088855474645024746  Python: -323473462781658831951562.4986088855474645024746  Correct ✅
+
+2. -3784232701732567.1384814303 + -75411387.082507610303687
+Java: -3784232777143954.220989040603687  Python: -3784232777143954.220989040603687  Correct ✅
+
+3. 226683331152.05418541558854525310087381377548 / 80844845767.57634254
+Java: 2.80393052890166893516831828541  Python: 2.80393052890166893516831828541  Correct ✅
+
+4. 20462715076325413850025736353241 - -47072024605867114
+Java: 20462715076325460922050342220355  Python: 20462715076325460922050342220355  Correct ✅
+
+5. 21536675153185832235511362548500761874361 / -57015111710288053304423667124362
+Java: -377736261  Python: -377736261  Correct ✅
+
+5 out of 5 test cases passed
 ```
 
-#### Each Test Performs:
-
-- **Compilation:**
+- **Compilation:** (done only once at the starting) 
 
 ```bash
 javac -cp .:home/anant/Programs/SDF/Project1/target/aarithmetic.jar MyInfArith/MyInfArith.java
 ```
+-- **Random Test Case Generation**
+Test cases are randomized over the following:
+    - Data types: int , float
+    - Operators: add , sum, multiply, divide
+    - Operands: Large random numbers, with random signs and decimal points (for floats).
 
+For Each Test Case:
 - **Execution:**
 
 ```bash
