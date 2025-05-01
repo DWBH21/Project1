@@ -76,7 +76,9 @@ The project includes a `test.py` script for automated testing. It supports:
 
 ```bash
 /usr/bin/python3 test.py
+```
 Output: 
+```bash
 No arguments found. Generating custom test cases
 Enter number of test cases to generate: 5
 1. -521201065.054138 * 620630855288177.7375262484013817
@@ -102,7 +104,7 @@ Java: -377736261  Python: -377736261  Correct ✅
 ```bash
 javac -cp .:home/anant/Programs/SDF/Project1/target/aarithmetic.jar MyInfArith/MyInfArith.java
 ```
--- **Random Test Case Generation**
+ **Random Test Case Generation**
 Test cases are randomized over the following:
     - Data types: int , float
     - Operators: add , sum, multiply, divide
@@ -116,7 +118,8 @@ java -cp .:home/anant/Programs/SDF/Project1/target/aarithmetic.jar:target/classe
 ```
 
 - **Verification:**  
-  Python calculates the expected result using `int` or the `Decimal` module (for float), and compares it with Java's output (up to 30 decimal digits for float).
+  Python calculates the expected result using `int` or the `Decimal` module (for float) and compares it with Java's output (up to 30 decimal digits for float).
+  And prints total number of test cases passed.
 
 ## Author
 
