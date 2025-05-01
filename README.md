@@ -8,13 +8,14 @@ This project implements an arbitrary precision arithmetic system in Java to over
 ## Features
 
 ### Java Classes
-- AInteger
-- 
-- Implementation of core arithmetic operations:
+- AInteger - For large integer arithmetic
+- AFloat - For arbitrary precision float arithmetic
+- Implementation of arithmetic operations:
   - Addition
   - Subtraction
   - Multiplication
   - Division
+- MyInfArith - Class used for demonstrating use of aarithmetic.jar as library. It allows execution of the AInteger and AFloat classes through the command line
 
 ## Dependencies 
 
@@ -46,21 +47,19 @@ This project implements an arbitrary precision arithmetic system in Java to over
 ```bash
 $ mvn clean install
 ```
-
 - `mvn clean` – Cleans the previous build artifacts.
 - `mvn install` – Compiles the source and creates the `aarithmetic.jar` in the `target` directory.
 
-#### 2. Compile CLI Interface
+#### 2. Compile the MyInfArith class and link it with the JAR file
 
 ```bash
-$ javac -cp .:home/anant/Programs/SDF/Project1/target/aarithmetic.jar MyInfArith/MyInfArith.java
+$ javac -cp .:<absolute path of the aarithmetic.jar file> <relative path of MyInfArith.java>
 ```
 
 #### 3. Run the Program
 
 ```bash
-$ java -cp .:home/anant/Programs/SDF/Project1/target/aarithmetic.jar:target/classes MyInfArith.MyInfArith int add 4 5
-Output: 9
+$ java -cp .:<absolute path of the aarithmetic.jar file> <relative path of MyInfArith.class> <int/float> <add/sub/mul/div> <operand1> <operand2>
 ```
 
 ## Testing
@@ -77,6 +76,8 @@ The project includes a `test.py` script for automated testing. It supports:
 
 ```bash
 /usr/bin/python3 test.py
+Output: 
+Enter number of test cases to generate: 
 ```
 
 #### Each Test Performs:
