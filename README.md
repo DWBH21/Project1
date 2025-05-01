@@ -121,6 +121,64 @@ java -cp .:home/anant/Programs/SDF/Project1/target/aarithmetic.jar:target/classe
   Python calculates the expected result using `int` or the `Decimal` module (for float) and compares it with Java's output (up to 30 decimal digits for float).
   And prints total number of test cases passed.
 
+## Containerization with Docker
+
+### Build the Docker Image
+    ```bash
+    docker build -t <image_name> .
+    ```
+The project uses a multi-stage Docker build. 
+- Stage 1 uses a Maven image to build the JAR.
+- Stage 2 uses a JDK 21 image with Python for running tests.
+
+### Run Java CLI in a Container
+
+```bash
+docker run <image_name> int add 123 456
+Output: 579
+```
+### Run Python Test Script in a Container
+
+**Randomized Testing:**
+
+```bash
+docker run -it --entrypoint python3 <image_name> /app/test.py
+```
+
+**Specific Test:**
+
+```bash
+docker run --entrypoint python3 <image_name> /app/test.py float div 10.5 2.5
+```
+
+### CLI Help
+
+If no arguments are passed, the container displays usage instructions:
+```bash
+docker run <image_name>
+```
+
+Other helpful Docker commands:
+
+Display all images and their information 
+```bash
+docker images
+```
+
+Display all containers (active and closed) 
+```bash
+docker ps -a
+```
+
+Remove all closed containers 
+```bash
+docker container prune
+```
+Remove an image with its image_name
+```bash
+docker rmi <image_name>
+```
+
 ## Author
 
 **Anant Maheshwary**  
