@@ -10,8 +10,9 @@ class MyInfArithPy:
         # Adding functionality so that python script runs in the container.
         if os.path.exists("/.dockerenv"):               # Checking if the script is running inside docker 
             self.jar_path = "/app/target/aarithmetic.jar"
-            self.classes_path = ".:/app/target/aarithmetic.jar"
-            self.java_test_path = "/app/MyInfArith/MyInfArith.java"
+            self.classes_path = "/app/target/aarithmetic.jar"
+            self.java_test_path = "MyInfArith/MyInfArith.java"
+            self.java_exec_path = "MyInfArith.MyInfArith"
         else:                                           # Checking if the script is running on local machine
             self.jar_path = "/home/anant/Programs/SDF/Project1/target/aarithmetic.jar"  # Absolute Path to the Jar File
             self.classes_path = "/home/anant/Programs/SDF/Project1/target/aarithmetic.jar:target/classes"
