@@ -1,5 +1,5 @@
 # Downloadinig public base image for maven from docker hub in the build stage which creates the build image
-FROM maven:3.8.7-eclipse-temurin-21 AS build    
+FROM maven:3.9.6-eclipse-temurin-21 AS build    
 
 # Setting working directory
 WORKDIR /app
@@ -36,4 +36,24 @@ COPY --from=build /app/test.py .
 RUN javac -cp .:target/aarithmetic.jar MyInfArith/MyInfArith.java
 
 # Setting default entrypoint for execution of MyInfArith from the command line
-ENTRYPOINT ["java", "-cp", ".:target/aarithmetic.jar", "MyInfArith.MyInfArith"]
+# Writing a shell-script inline to print usage instructions conditioned on the number of arguments passed.
+RUN echo '#!/bin/sh\n\
+if [ $# -eq 0 ]; then\n\
+    cat << "EOF"\n\
+Usage:\n\
+  To run MyInfArith: docker run <image_name> <int/float> <add/sub/mul/div> <operand1> <operand2>\n\
+  To run Python tests (interactive): docker run -it --entrypoint python3 <image_name> /app/test.py\n\
+  For custom Python tests: docker run --entrypoint python3 <image_name> /app/test.py <int/float> <add/sub/mul/div> <operand1> <operand2>\n\
+EOF\n\
+else\n\
+    exec java -cp .:target/aarithmetic.jar MyInfArith.MyInfArith "$@"\n\
+fi' > /app/entrypoint.sh && chmod +x /app/entrypoint.sh
+
+# Set as entrypoint
+ENTRYPOINT ["/app/entrypoint.sh"]
+CMD []
+
+# The above script is added because:
+# Earlier, ENTRYPOINT ["java", "-cp", ".:target/aarithmetic.jar", "MyInfArith.MyInfArith"] 
+# This original entry point was creating problems as even when docker run test.py was being run, the default entry point was attempting to execute the MyInfArith.java file.
+# This is was creating an error as the MyInfArith.java thought that it was getting invalid number of arguments.
