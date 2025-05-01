@@ -3,13 +3,20 @@ import subprocess
 import sys
 import random
 from decimal import Decimal, getcontext
+import os
 class MyInfArithPy:
 
     def __init__(self):
-        self.jar_path = "/home/anant/Programs/SDF/Project1/target/aarithmetic.jar"  # Absolute Path to the Jar File
-        self.classes_path = "/home/anant/Programs/SDF/Project1/target/aarithmetic.jar:target/classes"
-        self.java_test_path = "MyInfArith/MyInfArith.java"                               # Relative Path to the MyINfArith.java file
-        self.java_exec_path = "MyInfArith.MyInfArith"
+        # Adding functionality so that python script runs in the container.
+        if os.path.exists("/.dockerenv"):               # Checking if the script is running inside docker 
+            self.jar_path = "/app/target/aarithmetic.jar"
+            self.classes_path = ".:/app/target/aarithmetic.jar"
+            self.java_test_path = "/app/MyInfArith/MyInfArith.java"
+        else:                                           # Checking if the script is running on local machine
+            self.jar_path = "/home/anant/Programs/SDF/Project1/target/aarithmetic.jar"  # Absolute Path to the Jar File
+            self.classes_path = "/home/anant/Programs/SDF/Project1/target/aarithmetic.jar:target/classes"
+            self.java_test_path = "MyInfArith/MyInfArith.java"                               # Relative Path to the MyINfArith.java file
+            self.java_exec_path = "MyInfArith.MyInfArith"
 
     def compile(self):
         command = [
