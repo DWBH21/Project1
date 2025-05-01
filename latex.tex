@@ -358,6 +358,11 @@ Display all containers (active and closed)
 docker ps -a
 \end{lstlisting}
 
+Run the container to start an interactive shell (by overriding the entrypoint)
+\begin{lstlisting}[language=bash, basicstyle=\ttfamily\footnotesize, frame=single, breaklines=true]
+docker run -it --entrypoint "/bin/bash" my-arithmetic-app
+\end{lstlisting}
+
 Remove all closed containers
 \begin{lstlisting}[language=bash, basicstyle=\ttfamily\footnotesize, frame=single, breaklines=true]
 docker container prune

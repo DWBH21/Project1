@@ -32,6 +32,10 @@ COPY --from=build /app/target/aarithmetic.jar ./target/aarithmetic.jar
 COPY --from=build /app/MyInfArith/ ./MyInfArith/
 COPY --from=build /app/test.py . 
 
+# copying readme and report
+COPY report.pdf /app/report.pdf
+COPY README.md /app/README.md
+
 # Compiling the MyInfArith class
 RUN javac -cp .:target/aarithmetic.jar MyInfArith/MyInfArith.java
 

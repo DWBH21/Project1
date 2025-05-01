@@ -169,6 +169,10 @@ Display all containers (active and closed)
 ```bash
 docker ps -a
 ```
+Run the container to start an interactive shell (by overriding the entrypoint)
+```bash
+docker run -it --entrypoint "/bin/bash" my-arithmetic-app
+```
 
 Remove all closed containers 
 ```bash
