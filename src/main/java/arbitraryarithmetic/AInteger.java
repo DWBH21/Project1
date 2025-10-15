@@ -11,6 +11,7 @@ public class AInteger {
     // It holds the part of the number in base 10^9. The first element of the array holds the Least Significant 9 digits.
     // All elements of this array other than the last store 9 digit decimal numbers.
 
+    // 1 2345678901 234567890 
     private static final int TENPOWERNINE = 1000000000;
     private static final int WORD_LENGTH = 9;
 
